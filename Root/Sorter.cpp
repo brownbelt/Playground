@@ -5,6 +5,7 @@
 #include <ctime>
 #include <chrono>
 #include <vector>
+#include <deque>
 
 namespace Benchmark {
     std::chrono::steady_clock::time_point beforeSort;
@@ -76,6 +77,33 @@ unsigned int sort(unsigned int valCount){
     return Benchmark::microSpan.count();
 }
 
+/* unsigned int sort2(unsigned int valCount){
+    std::deque<unsigned int> randAccum(valCount);
+
+    srand(time(NULL));
+    for(unsigned int randNumElem = 0; randNumElem < randAccum.size(); randNumElem++)
+        randAccum[randNumElem] = static_cast<unsigned int>(std::rand());
+
+    Benchmark::beforeSort = std::chrono::steady_clock::now();
+
+    unsigned int currentVal;
+    unsigned int tempVal;
+    unsigned int replaceIndex;
+    for(unsigned int setCount = 1; setCount < randAccum.size(); setCount++){
+        currentVal = randAccum[setCount];
+        replaceIndex = setCount;
+        for(unsigned int setElem = 0; setElem < setCount; setElem++){
+            if(currentVal < randAccum[setCount - (setElem + 1)]) replaceIndex--;
+            else break;
+        }
+        if(replaceIndex != setCount){
+            tempVal = randAccum[replaceIndex];
+            randAccum.insert(randAccum.begin() + setCount, tempVal);
+            randAccum.insert(randAccum.begin() + replaceIndex, currentVal);
+        }
+    }
+} */
+
 int main(int argc, char** argv) {
     std::cout << argv[0] << std::endl;
 
@@ -83,6 +111,8 @@ int main(int argc, char** argv) {
     sort(60);
     sort(303);
     sort(1020);
+
+    // sort2(10);
 
     return 0;
 }

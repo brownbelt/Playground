@@ -31,5 +31,8 @@ if (EXISTS "${EXTLIB_BUILD_PATH}/ExtlibCache.txt")
         message(FATAL_ERROR "Generators are incompatible")
     endif()
 
+    # find_package(kstool REQUIRED CONFIG PATHS ${CMAKE_INSTALL_PREFIX}/targets)
+    find_package(keystone REQUIRED CONFIG PATHS ${CMAKE_INSTALL_PREFIX}/targets)
+    add_subdirectory("OpenGenus-cosmos/sorting")
     add_subdirectory("Root")
 endif()

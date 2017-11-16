@@ -36,6 +36,13 @@ ExternalProject_Add(KeystoneEngine
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+        "${CMAKE_SOURCE_DIR}/patch/KeystoneEngine/llvm/keystone/CMakeLists.txt"
+        "<SOURCE_DIR>/llvm/keystone/CMakeLists.txt"
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "${CMAKE_SOURCE_DIR}/patch/KeystoneEngine/llvm/keystone/keystone-config.cmake"
+        "<SOURCE_DIR>/llvm/keystone/keystone-config.cmake"
+
     PREFIX "${KEYSTONE_PROJECT_DIR}"
     BINARY_DIR "${KEYSTONE_PROJECT_DIR}/build"
     TMP_DIR "${KEYSTONE_PROJECT_DIR}/temp"
@@ -43,6 +50,9 @@ ExternalProject_Add(KeystoneEngine
 )
 
 list(APPEND EXTLIB_TARGETS KeystoneEngine)
+
+ExternalProject_Get_Property(KeystoneEngine BINARY_DIR)
+set(KEYSTONE_BUILD_DIR ${BINARY_DIR})
 
 include("cmake/CompilerSettings.cmake")
 include("cmake/WriteInitialCache.cmake")
@@ -56,6 +66,10 @@ ExtlibWriteConfig(
         -DEXTLIB_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
         -DEXTLIB_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
         -DEXTLIB_GENERATOR:STRING=${CMAKE_GENERATOR}
+
+        -DEXTILB_TARGETS_DIR:PATH=${CMAKE_INSTALL_PREFIX}/targets
+        -DKEYSTONE_DIR:PATH=${KEYSTONE_BUILD_DIR}
+        # -DKSTOOL_:FILEPATH=${CMAKE_INSTALL_PREFIX}/targets/ktstoolTarget.cmake
 )
 
 add_custom_command(OUTPUT "${CMAKE_BINARY_DIR}/ExtlibCache.txt"
